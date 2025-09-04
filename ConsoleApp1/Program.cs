@@ -1,30 +1,32 @@
 ﻿using System;
-using System.Diagnostics;
+using System.Diagnostics; 
 
-class Program
-{
-    static void Main(string[] args)
-    {
-        Console.Write("Enter something for the cow to say: ");
-        string? userInput = Console.ReadLine();
-
-        if (string.IsNullOrWhiteSpace(userInput))
-        {
-            Console.WriteLine("No input provided.");
-            return;
-        }
-
-        // debug this and make sure to call cowsay in wsl
-        ProcessStartInfo psi = new ProcessStartInfo
-        {
-            FileName = "cowsay",
-            Arguments = $"\"{userInput}\"",
-            RedirectStandardOutput = true,
-            UseShellExecute = false,
-            CreateNoWindow = true
-        };
+#System provides acess to classes like console
 
 
-    }
+class Program {
+	static void Main(string[] args) 
+	 {
+		 Console.Write("Enter what you want for the cow to say: ");
+		# waits for user type and press enter
+		 string userInput = Console.ReadLine();
+
+
+		 ProcessStartInfo psi = new ProcessStartInfo 
+		 {
+			 Filename = "wsl",
+			 Arguments = "cowsay \"{userInput}\"",
+			 RedirectStandardOuput = true,
+			 UseShellExecute = false,
+			 CreateNoWindow, true
+		 };
+
+		 using (Process process = Process.Start(psi))
+		{
+			string result = process.StandardOutput.ReadToEnd();
+			process.WaitforExit();
+			Console.WriteLine(result);
+		}
+	 }
+
 }
-
