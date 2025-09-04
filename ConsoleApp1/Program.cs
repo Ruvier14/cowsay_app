@@ -24,19 +24,7 @@ class Program
             CreateNoWindow = true
         };
 
-        try
-        {
-            using (Process process = Process.Start(psi)!)
-            {
-                string result = process.StandardOutput.ReadToEnd();
-                process.WaitForExit();
-                Console.WriteLine(result);
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine("Error running cowsay: " + ex.Message);
-        }
+
     }
 }
 
