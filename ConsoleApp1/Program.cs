@@ -6,21 +6,27 @@ class Program
     static void Main(string[] args)
     {
         Console.Write("Enter something for the cow to say: ");
-        string userInput = Console.ReadLine();
+        string? userInput = Console.ReadLine();
 
-        // Setup process to call cowsay through WSL
+        if (string.IsNullOrWhiteSpace(userInput))
+        {
+            Console.WriteLine("No input provided.");
+            return;
+        }
+
+        // debug this and make sure to call cowsay in wsl
         ProcessStartInfo psi = new ProcessStartInfo
         {
-            FileName = "wsl",                  // Call WSL
-            Arguments = $"cowsay \"{userInput}\"", // cowsay inside WSL
-            RedirectStandardOutput = true,     // Capture output
+            FileName = "cowsay",
+            Arguments = $"\"{userInput}\"",
+            RedirectStandardOutput = true,
             UseShellExecute = false,
             CreateNoWindow = true
         };
 
         try
         {
-            using (Process process = Process.Start(psi))
+            using (Process process = Process.Start(psi)!)
             {
                 string result = process.StandardOutput.ReadToEnd();
                 process.WaitForExit();
@@ -33,3 +39,4 @@ class Program
         }
     }
 }
+
