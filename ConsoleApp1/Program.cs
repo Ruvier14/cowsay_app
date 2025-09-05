@@ -1,32 +1,46 @@
 ﻿using System;
-using System.Diagnostics; 
+using System.Diagnostics;
 
-#System provides acess to classes like console
+class Program
+{
+    static void Main(string[] args)
+    {
+        // Prompt the user
+        Console.Write("Enter what you want for the cow to say: ");
+        string? userInput = Console.ReadLine();
+	
+	// if user does not input anything -- then cow does not say anything 
+	if (string.IsNullOrWhiteSpace(userInput))
+        {
+            Console.WriteLine("Cow has nothing to say ");
+            return;
+        }
 
 
-class Program {
-	static void Main(string[] args) 
-	 {
-		 Console.Write("Enter what you want for the cow to say: ");
-		# waits for user type and press enter
-		 string userInput = Console.ReadLine();
+        // Setup process to run cowsay inside WSL
+	var psi = new ProcessStartInfo("cowsay", userInput)
+        {
+            RedirectStandardOutput = true,          // capture output
+            UseShellExecute = false,                // required for redirection
+            CreateNoWindow = true                   // don’t show extra terminal window
+        };
 
-
-		 ProcessStartInfo psi = new ProcessStartInfo 
-		 {
-			 Filename = "wsl",
-			 Arguments = "cowsay \"{userInput}\"",
-			 RedirectStandardOuput = true,
-			 UseShellExecute = false,
-			 CreateNoWindow, true
-		 };
-
-		 using (Process process = Process.Start(psi))
-		{
-			string result = process.StandardOutput.ReadToEnd();
-			process.WaitforExit();
-			Console.WriteLine(result);
-		}
-	 }
-
+        try
+        {
+            {
+		// process to not be nullified read by the system 
+		// add ! operator fi the process is not null since if its cowsay
+		// then a process exist anyways
+		using var process = Process.Start(psi)!;    
+                string result = process.StandardOutput.ReadToEnd();
+                process.WaitForExit();
+                Console.WriteLine(result);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error running cowsay: {ex.Message}");
+        }
+    }
 }
+
